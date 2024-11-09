@@ -1,0 +1,55 @@
+-- Crear tabla de Usuarios
+CREATE TABLE usuarios (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    nombre TEXT NOT NULL,
+    telefono TEXT NOT NULL UNIQUE,
+    email TEXT
+);
+
+-- Crear tabla de Soporte
+CREATE TABLE soporte (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    nombre TEXT NOT NULL,
+    telefono TEXT NOT NULL UNIQUE,
+    email TEXT,
+    contrasena TEXT NOT NULL
+);
+
+-- Crear tabla de Estados de Ticket
+CREATE TABLE estados_ticket (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    estado TEXT NOT NULL UNIQUE
+);
+
+-- Crear tabla de Tickets
+CREATE TABLE tickets (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    usuario_id BIGINT REFERENCES usuarios(id),
+    estado_id BIGINT REFERENCES estados_ticket(id),
+    creado_en TIMESTAMPTZ DEFAULT NOW(),
+    actualizado_en TIMESTAMPTZ DEFAULT NOW(),
+    asunto TEXT NOT NULL
+);
+
+-- Crear tabla de Mensajes
+CREATE TABLE mensajes (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    ticket_id BIGINT REFERENCES tickets(id),
+    contenido TEXT NOT NULL,
+    enviado_en TIMESTAMPTZ DEFAULT NOW(),
+    remitente TEXT NOT NULL,
+    es_soporte BOOLEAN DEFAULT FALSE,
+    soporte_id BIGINT REFERENCES soporte(id)
+);
+
+create
+or replace function insertar_mensaje (ticket_id bigint, contenido text, remitente text) returns void as $$
+BEGIN
+    -- Verificar si el remitente está registrado como usuario
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE telefono = remitente) THEN
+        RAISE EXCEPTION 'El remitente no está registrado como usuario';
+    END IF;
+
+    -- Insertar el mensaje si el remitente está registrado
+    INSERT INTO mensajes (ticket_id, contenido, remitente) VALUES (ticket_id, contenido, remitente);
+END;
