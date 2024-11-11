@@ -10,7 +10,7 @@ const Navbar = () => (
 
       {/* Links de Navegación */}
       <Flex align="center" gap={6}>
-        <Link href="#" fontSize="lg" color="white">
+        <Link href="/home" fontSize="lg" color="white">
           Inicio
         </Link>
         <Link href="/panel" fontSize="lg" color="white">
