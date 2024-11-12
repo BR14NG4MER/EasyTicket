@@ -80,7 +80,6 @@ const TicketManagement = () => {
 
 
 
-
   const handleTicketForm = async (ticketData: any, method: string, id?: number) => {
     try {
       const url = method === "update" ? `${apiUrl}/update_ticket/${id}` : `${apiUrl}/add_ticket`;

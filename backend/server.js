@@ -190,6 +190,27 @@ app.post('/api/add_ticket', (req, res) => {
                 console.error('Error al agregar el ticket:', err);
                 return res.status(500).send({ message: 'Error al agregar el ticket' });
             }
+
+
+          
+            const twilio = require("twilio"); 
+
+            const accountSid = '';
+            const authToken = '';
+            const client = twilio(accountSid, authToken);
+
+            async function createMessage() {
+                const message = await client.messages.create({
+                    body: "Hola usuario, este es tu numero de ticket #"+result.insertId+" digital \n Titulo: "+titulo+" \n Descripcion: "+asunto,
+                    from: "whatsapp:+14155238886",
+                    to: "",
+                });
+
+                console.log(message.body);
+            }
+
+            createMessage();
+
             return res.status(201).send({
                 id: result.insertId,
                 titulo,
