@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Box, Button, FormControl, FormLabel, Input, Heading, VStack, Table, Thead, Tbody, Tr, Th, Td, useToast, Stack, IconButton } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import Navbar from "../components/Navbar";
+import withAuth from "../components/withAuth";
 
 function AdminPanel() {
   const [userName, setUserName] = useState("");
@@ -281,4 +282,4 @@ function AdminPanel() {
   );
 }
 
-export default AdminPanel;
+export default withAuth(AdminPanel);

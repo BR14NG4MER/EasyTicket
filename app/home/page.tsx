@@ -20,6 +20,7 @@ import { InfoIcon, RepeatIcon } from "@chakra-ui/icons";
 import Navbar from "../components/Navbar";
 /* Libreria para base de datos */
 import axios from 'axios';
+import withAuth from "../components/withAuth";
 
 interface Status {
   estado_id: number;
@@ -216,4 +217,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withAuth(Home);

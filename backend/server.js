@@ -192,8 +192,8 @@ app.post('/api/add_ticket', (req, res) => {
             }
 
 
-          
-            const twilio = require("twilio"); 
+
+            const twilio = require("twilio");
 
             const accountSid = '';
             const authToken = '';
@@ -201,9 +201,9 @@ app.post('/api/add_ticket', (req, res) => {
 
             async function createMessage() {
                 const message = await client.messages.create({
-                    body: "Hola usuario, este es tu numero de ticket #"+result.insertId+" digital \n Titulo: "+titulo+" \n Descripcion: "+asunto,
+                    body: "Hola usuario, este es tu numero de ticket #" + result.insertId + " digital \n Titulo: " + titulo + " \n Descripcion: " + asunto,
                     from: "whatsapp:+14155238886",
-                    to: "",
+                    to: "whatsapp:+5216645077840",
                 });
 
                 console.log(message.body);
@@ -219,6 +219,30 @@ app.post('/api/add_ticket', (req, res) => {
                 soporte_id
             });
         });
+    });
+});
+
+
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).send({ message: 'Por favor, ingresa todos los campos' });
+    }
+
+    const query = 'SELECT * FROM soporte WHERE nombre = ? AND contrasena = ?';
+    
+    db.query(query, [username, password], (err, result) => {
+        if (err) {
+            console.error('Error al verificar el login:', err);
+            return res.status(500).send({ message: 'Error al verificar el login' });
+        }
+        if (result.length === 0) {
+   
+            return res.status(401).send({ message: 'Credenciales incorrectas' });
+        }
+    
+        return res.status(200).send({ message: 'Login exitoso', user: result[0] });
     });
 });
 

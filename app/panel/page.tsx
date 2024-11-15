@@ -23,6 +23,7 @@ import {
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import Navbar from "../components/Navbar";
 import axios from 'axios';
+import withAuth from "../components/withAuth";
 
 interface Ticket {
   id: number;
@@ -271,4 +272,4 @@ const TicketManagement = () => {
   );
 };
 
-export default TicketManagement;
+export default withAuth(TicketManagement);
